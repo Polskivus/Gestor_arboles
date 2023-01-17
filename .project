@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>BASE_DATOS_ARBOLES</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>resources/mysql-connector-j-8.0.32.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/mysqul/mysql-connector-j-8.0.32/mysql-connector-j-8.0.32.jar</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
