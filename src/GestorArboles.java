@@ -28,7 +28,7 @@ public class GestorArboles {
 
 			do {
 
-				System.out.println("-------------------BIENVENIDO-------------------");
+				System.out.println("-------------------BIENVENIDO-------------------\n");
 				System.out.println(INSERTAR_ARBOL + ".- Insertar arbol.");
 				System.out.println(ELIMINAR_ARBOL + ".- Eliminar arbol.");
 				System.out.println(MODIFICAR_ARBOL + ".- Modificar arbol.");
@@ -59,6 +59,8 @@ public class GestorArboles {
 							+ arbol.getNombre_comun() + "','" + arbol.getNombre_cientifico() + "','"
 							+ arbol.getHabitat() + "','" + arbol.getAltura() + "','" + arbol.getOrigen() + "')";
 					st.execute(sentenciaInsert);
+					
+					System.out.println("-------------------REGISTRADO-------------------\n");
 
 					break;
 
@@ -68,20 +70,44 @@ public class GestorArboles {
 
 					int id = Integer.parseInt(sc.nextLine());
 
-					String sentenciaDelete = "DELETE FROM eh_garden WHERE id = id";
+					String sentenciaDelete = "DELETE FROM eh_garden WHERE id = '"+id+"'";
 					st.execute(sentenciaDelete);
 
+					System.out.println("-------------------ELIMINADO-------------------\n");
+					
 					break;
 
 				case MODIFICAR_ARBOL:
 
-					System.out.println("Introduce el nombre cientifico del arbol que quieres modificar");
-					String arbolmod = sc.nextLine();
+					System.out.println("Introduce el id del arbol que quieres modificar");
+					int arbolmod = Integer.parseInt(sc.nextLine());
+					
+					System.out.println("Introduce nuevo nombre comun");
+					arbol.setNombre_comun(sc.nextLine());
+					
+					System.out.println("Introduce nuevo nombre cientifico.");
+					arbol.setNombre_cientifico(sc.nextLine());
+					
+					System.out.println("Introduce nuevo habitad.");
+					arbol.setHabitat(sc.nextLine());
+					
+					System.out.println("Introduce la nueva altura.");
+					arbol.setAltura(Integer.parseInt(sc.nextLine()));
+					
+					System.out.println("Introduce nuevo origen.");
+					arbol.setOrigen(sc.nextLine());
 					
 					
-					String sentenciaUpdate = "UPDATE eh_garden SET nombre_comun = '" + arbol.getNombre_comun() + "', nombre_cientifico = '" + arbol.getNombre_cientifico() + "', habitad = '" + arbol.getHabitat() + "', altura = '"+arbol.getAltura()+"', origen = '"+arbol.getOrigen()+"' WHERE nombre_cientifico = '"+arbolmod+"'";
-					st.executeUpdate(sentenciaUpdate);
+					PreparedStatement preparest = cx.prepareStatement("UPDATE eh_garden SET nombre_comun = ? ,nombre_cientifico = ? ,habitad = ?,altura = ?,origen = ? WHERE id =?");
+					preparest.setString(1, arbol.getNombre_comun());
+					preparest.setString(2, arbol.getNombre_cientifico());
+					preparest.setString(3, arbol.getHabitat());
+					preparest.setInt(4, arbol.getAltura());
+					preparest.setString(5, arbol.getOrigen());
+					preparest.setInt(6, arbolmod);
+					preparest.executeUpdate();
 					
+					System.out.println("-------------------MODIFICADO-------------------\n");
 					
 					break;
 
@@ -90,6 +116,12 @@ public class GestorArboles {
 					
 					String sentenciaSelect = "SELECT * FROM eh_garden";
 					ResultSet resultSet = st.executeQuery(sentenciaSelect);
+					
+					System.out.println("-------------------RESULTADO-------------------\n");
+					
+					while(resultSet.next()) {
+						System.out.println(resultSet.getInt(1)+" - "+resultSet.getString(2)+" - "+resultSet.getString(3)+" - "+resultSet.getString(4)+" - "+resultSet.getInt(5)+" - "+resultSet.getString(6));
+					}
 					
 					break;
 
