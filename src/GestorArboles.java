@@ -17,12 +17,15 @@ public class GestorArboles {
 
 		Arbol arbol = new Arbol();
 
+		PreparedStatement preparest;
+		
 		// AQUI SE CONECTA.
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		try {
 			cx = DriverManager.getConnection("jdbc:mysql://localhost/prueba", "root", "");
 
 			Statement st = cx.createStatement();
+			
 
 			int opc;
 
@@ -55,10 +58,17 @@ public class GestorArboles {
 					System.out.println("Introduce el origen del arbol");
 					arbol.setOrigen(sc.nextLine());
 
-					String sentenciaInsert = "INSERT INTO eh_garden (nombre_comun, nombre_cientifico ,habitad ,altura ,origen) VALUES ('"
-							+ arbol.getNombre_comun() + "','" + arbol.getNombre_cientifico() + "','"
-							+ arbol.getHabitat() + "','" + arbol.getAltura() + "','" + arbol.getOrigen() + "')";
-					st.execute(sentenciaInsert);
+					String sentenciaInsert = "INSERT INTO eh_garden (nombre_comun, nombre_cientifico ,habitad ,altura ,origen) VALUES (?,?,?,?,?)";
+					
+					PreparedStatement preparsetinser = cx.prepareStatement(sentenciaInsert);
+					
+					preparsetinser.setString(1, arbol.getNombre_comun());
+					preparsetinser.setString(2, arbol.getNombre_cientifico());
+					preparsetinser.setString(3, arbol.getHabitat());
+					preparsetinser.setInt(4, arbol.getAltura());
+					preparsetinser.setString(5, arbol.getOrigen());
+					
+					preparsetinser.executeUpdate();
 					
 					System.out.println("-------------------REGISTRADO-------------------\n");
 
@@ -70,8 +80,13 @@ public class GestorArboles {
 
 					int id = Integer.parseInt(sc.nextLine());
 
-					String sentenciaDelete = "DELETE FROM eh_garden WHERE id = '"+id+"'";
-					st.execute(sentenciaDelete);
+					String sentenciaDelete = "DELETE FROM eh_garden WHERE id = ?";
+					
+					PreparedStatement prepstatedel = cx.prepareStatement(sentenciaDelete);
+					
+					prepstatedel.setInt(1, id);
+					
+					prepstatedel.executeUpdate();
 
 					System.out.println("-------------------ELIMINADO-------------------\n");
 					
@@ -98,7 +113,7 @@ public class GestorArboles {
 					arbol.setOrigen(sc.nextLine());
 					
 					
-					PreparedStatement preparest = cx.prepareStatement("UPDATE eh_garden SET nombre_comun = ? ,nombre_cientifico = ? ,habitad = ?,altura = ?,origen = ? WHERE id =?");
+					preparest = cx.prepareStatement("UPDATE eh_garden SET nombre_comun = ? ,nombre_cientifico = ? ,habitad = ?,altura = ?,origen = ? WHERE id =?");
 					preparest.setString(1, arbol.getNombre_comun());
 					preparest.setString(2, arbol.getNombre_cientifico());
 					preparest.setString(3, arbol.getHabitat());
@@ -120,7 +135,9 @@ public class GestorArboles {
 					System.out.println("-------------------RESULTADO-------------------\n");
 					
 					while(resultSet.next()) {
-						System.out.println(resultSet.getInt(1)+" - "+resultSet.getString(2)+" - "+resultSet.getString(3)+" - "+resultSet.getString(4)+" - "+resultSet.getInt(5)+" - "+resultSet.getString(6));
+						//System.out.println(resultSet.getInt(1)+" - "+resultSet.getString(2)+" - "+resultSet.getString(3)+" - "+resultSet.getString(4)+" - "+resultSet.getInt(5)+" - "+resultSet.getString(6));
+					
+						
 					}
 					
 					break;
